@@ -1,0 +1,26 @@
+<div class="offcanvas-header">
+  <h5 class="offcanvas-title">Cad Parameters</h5>
+  <button type="button" class="btn-close text-reset" aria-label="Close"
+    (click)="activeOffcanvas.dismiss('Cross click')"></button>
+</div>
+<div class="offcanvas-body">
+  <!-- <div>Hello {{ name }}</div> -->
+  
+  <ul class="list-group mb-3">
+    <li class="list-group-item" (click)="openModal('Model')"><i class="bi bi-box me-2"></i>Model</li>
+    <li class="list-group-item" (click)="openModal('Nodes')"><i class="bi bi-diagram-2 me-2"></i>Nodes</li>
+    <li class="list-group-item" (click)="openModal('Materials')"><i class="bi bi-palette2 me-2"></i>Materials</li>
+    <li class="list-group-item" (click)="openModal('Sections')"><i class="bi bi-upload me-2"></i>Sections</li>
+    <li class="list-group-item" (click)="openModal('Elements')"><i class="bi bi-bounding-box-circles me-2"></i>Elements</li>
+    <li class="list-group-item" (click)="openModal('Supports')"><i class="bi bi-screwdriver me-2"></i>Supports</li>
+    <li class="list-group-item" (click)="openModal('Point Loads')"><i class="bi bi-cursor me-2"></i>Point Loads</li>
+    <li class="list-group-item" (click)="openModal('Dist Loads')"><i class="bi bi-bricks me-2"></i>Dist Loads</li>
+    <li class="list-group-item" (click)="openModal('Results')"><i class="bi bi-card-text me-2"></i>Results</li>
+    <li class="list-group-item" (click)="openModal('Settings')"><i class="bi bi-gear me-2"></i>Settings</li>
+  </ul>
+
+  <button type="button" class="btn btn-outline-secondary" (click)="activeOffcanvas.close('Close click')">
+    Close
+  </button>
+</div>
+

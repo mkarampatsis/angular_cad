@@ -1,0 +1,19 @@
+<div class="my-2 p-3 h-100">
+  <div class="mb-2">
+    <app-sidebar></app-sidebar>
+  </div>
+  <div class="bg-body-secondary h-75 border border-success">
+    <div class="canvas-container">
+      <ngt-canvas 
+        shadows
+        [camera]="{ position: [5, 5, 5] }" 
+        [lookAt]="[0, 1, 0]">
+        <app-scene-graph *canvasContent />
+      </ngt-canvas>
+    </div>
+    <!-- <ngt-mesh #mesh [position]="[0, 1, 0]">
+      <ngt-box-geometry *args="[1, 2, 1]" />
+      <ngt-mesh-basic-material color="mediumpurple" />
+    </ngt-mesh> -->
+  </div>
+</div>

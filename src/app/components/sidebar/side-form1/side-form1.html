@@ -1,0 +1,42 @@
+<div class="offcanvas-header">
+  <h5 class="offcanvas-title">Application Choices</h5>
+  <button type="button" class="btn-close text-reset" aria-label="Close"
+    (click)="activeOffcanvas.dismiss('Cross click')"></button>
+</div>
+<div class="offcanvas-body">
+  <!-- <div>Hello {{ name }}</div> -->
+  
+  <!-- File Menu -->
+  <h6 class="mt-3"><i class="bi bi-folder me-2"></i>File</h6>
+  <ul class="list-group mb-3">
+    <li class="list-group-item" (click)="newFile()"><i class="bi bi-file-earmark-plus me-2"></i>New</li>
+    <li class="list-group-item" (click)="loadFile()"><i class="bi bi-folder2-open me-2"></i>Load</li>
+    <li class="list-group-item" (click)="saveFile()"><i class="bi bi-save me-2"></i>Save</li>
+    <li class="list-group-item" (click)="importDxf()"><i class="bi bi-upload me-2"></i>Import DXF</li>
+    <li class="list-group-item" (click)="exportScene()"><i class="bi bi-download me-2"></i>Export Scene</li>
+    <li class="list-group-item" (click)="publish()"><i class="bi bi-cloud-upload me-2"></i>Publish</li>
+  </ul>
+
+  <!-- View Menu -->
+  <h6 class="mt-3"><i class="bi bi-eye me-2"></i>View</h6>
+  <ul class="list-group mb-3">
+    <li class="list-group-item" (click)="toggleNodeIDs()"><i class="bi bi-dot me-2"></i>Toggle Node IDs</li>
+    <li class="list-group-item" (click)="toggleBeamIDs()"><i class="bi bi-diagram-3 me-2"></i>Toggle Beam IDs</li>
+    <li class="list-group-item" (click)="toggleColumnIDs()"><i class="bi bi-diagram-2 me-2"></i>Toggle Column IDs</li>
+    <li class="list-group-item" (click)="toggleGrid()"><i class="bi bi-grid-3x3-gap me-2"></i>Toggle Grid Visibility</li>
+  </ul>
+
+  <!-- Run Menu -->
+  <h6 class="mt-3"><i class="bi bi-rocket-takeoff me-2"></i>Run</h6>
+  <ul class="list-group mb-3">
+    <li class="list-group-item" (click)="runOptimization()"><i class="bi bi-cpu me-2"></i>Run</li>
+  </ul>
+
+  <button type="button" class="btn btn-outline-secondary" (click)="activeOffcanvas.close('Close click')">
+    Close
+  </button>
+
+  <!-- Hidden file input --> 
+   <input #dxfInput type="file" accept=".dxf" (change)="loadDXF($event)" style="display: none" />
+</div>
+

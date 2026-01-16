@@ -1,0 +1,11 @@
+<ngt-mesh #mesh 
+  [position]="[positionX(), 1, 0]"
+  [scale]="clicked() ? 1.5 : 1" 
+  (pointerover)="hovered.set(true)"
+  (pointerout)="hovered.set(false)" 
+  (click)="clicked.set(!clicked())"
+  castShadow
+>
+  <ngt-box-geometry *args="[1, 2, 1]" />
+  <ngt-mesh-standard-material [color]="hovered() ? 'hotpink' : 'mediumpurple'" />
+</ngt-mesh>

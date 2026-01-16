@@ -1,10 +1,11 @@
 import { Component, signal } from '@angular/core';
-import { NgtCanvas } from "angular-three/dom";
-import { SceneGraph } from './components/scene-graph/scene-graph';
+import { RouterOutlet } from '@angular/router';
+import { Navbar } from './components/navbar/navbar';
+import { Footer } from './components/footer/footer';
 
 @Component({
   selector: 'app-root',
-  imports: [NgtCanvas, SceneGraph],
+  imports: [RouterOutlet,Navbar,Footer],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
