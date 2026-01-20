@@ -1,6 +1,7 @@
 import { Component, inject, Input, ViewChild, ElementRef } from '@angular/core';
 import { NgbActiveOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 import { DxfLoaderService } from '../../../shared/services/dxf-loader.service';
+import { ImportFileService } from '../../../shared/services/import-file.service';
 
 @Component({
   selector: 'app-side-form1',
@@ -10,18 +11,19 @@ import { DxfLoaderService } from '../../../shared/services/dxf-loader.service';
 })
 export class SideForm1 {
 activeOffcanvas = inject(NgbActiveOffcanvas);
-  @ViewChild('dxfInput') dxfInput!: ElementRef<HTMLInputElement>;
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
+  importFileService = inject(ImportFileService);
   // dxfLoaderService = inject(DxfLoaderService);
 	// @Input() name: string | undefined;
 
   // File actions
   newFile() { console.log('New File'); }
-  loadFile() { console.log('Load File'); }
+  // loadFile() { console.log('Load File'); }
   saveFile() { console.log('Save File'); }
-  importDxf() { 
+  importFile() { 
     console.log('Import DXF'); 
-    this.dxfInput.nativeElement.click();
+    this.fileInput.nativeElement.click();
   }
   exportScene() { console.log('Export Scene'); }
   publish() { console.log('Publish'); }
@@ -35,16 +37,22 @@ activeOffcanvas = inject(NgbActiveOffcanvas);
   // Run
   runOptimization() { console.log('Run Optimization'); }
 
-  loadDXF(event: Event) { 
-    const input = event.target as HTMLInputElement; 
-    const file = input.files?.[0]; 
-    if (!file) return; 
-    const reader = new FileReader(); 
-    reader.onload = () => { 
-      const dxfText = reader.result as string;
-      // your DXF loading logic here
-      // this.dxfLoaderService.dxfFile.set(file);
-    }; 
-    reader.readAsText(file); 
+  loadFile(event: Event) { 
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file) return;
+
+    const ext = file.name.split('.').pop()?.toLowerCase();
+
+    if (ext === 'dxf') {
+      this.importFileService.cadFileSignal.set({ type: 'dxf', file });
+    }
+
+    if (ext === 'glb' || ext === 'gltf') {
+      const url = URL.createObjectURL(file);
+      this.importFileService.cadFileSignal.set({ type: 'glb', url });
+    }
+
+    input.value = '';
   }
 }

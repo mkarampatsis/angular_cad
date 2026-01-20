@@ -15,7 +15,7 @@ import { SupportsModal } from '../modals/supports-modal/supports-modal';
 @Injectable({
   providedIn: 'root',
 })
-export class Modal {
+export class ModalService {
    modalOpen = inject(NgbModal);
    showModelDetails(data: string) {
     const modalRef = this.modalOpen.open(ModelModal, {

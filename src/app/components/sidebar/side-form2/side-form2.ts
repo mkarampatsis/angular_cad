@@ -1,6 +1,6 @@
 import { Component, inject, Input } from '@angular/core';
 import { NgbActiveOffcanvas } from '@ng-bootstrap/ng-bootstrap';
-import { Modal } from '../../../shared/services/modal';
+import { ModalService } from '../../../shared/services/modal.service';
 
 @Component({
   selector: 'app-side-form2',
@@ -12,7 +12,7 @@ export class SideForm2 {
 @Input() name: string | undefined;
 
   activeOffcanvas = inject(NgbActiveOffcanvas);
-  modalService = inject(Modal);
+  modalService = inject(ModalService);
 
   openModal(modal: string) {
     switch (modal) {

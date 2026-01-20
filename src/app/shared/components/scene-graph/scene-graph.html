@@ -1,4 +1,4 @@
-<ngt-ambient-light [intensity]="0.5" />
+<!-- <ngt-ambient-light [intensity]="0.5" />
 <ngt-spot-light 
   [position]="[5, 10, -10]" 
   [intensity]="0.5 * Math.PI" 
@@ -17,4 +17,30 @@
   <ngt-mesh-standard-material />
 </ngt-mesh>
 <app-cube [positionX]="-2" />
-<app-cube [positionX]="2" />
+<app-cube [positionX]="2" /> -->
+<!-- <ngts-center  
+  [options]="{
+    disableX: false,
+    disableY: false,
+    disableZ: false
+  }">
+  <ngt-primitive *args="[gltf.scene()]" [parameters]="{ scale: 0.15 }" />
+</ngts-center> -->
+<!-- GLB -->
+@if (glbUrl()) {
+  @let gltfData = gltf;
+
+  @if (gltfData) {
+    <ngts-center
+      [options]="{
+        disableX: false,
+        disableY: false,
+        disableZ: false
+      }">
+      <ngt-primitive *args="[gltf.scene()]"  [parameters]="{ scale: 0.15 }" />
+    </ngts-center>
+  }
+}
+
+<ngts-environment [options]="{ preset: 'city' }" />
+<ngts-camera-controls />
