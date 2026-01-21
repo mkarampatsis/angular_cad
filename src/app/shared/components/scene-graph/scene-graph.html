@@ -26,8 +26,18 @@
   }">
   <ngt-primitive *args="[gltf.scene()]" [parameters]="{ scale: 0.15 }" />
 </ngts-center> -->
-<!-- GLB -->
 
+<!-- DXF -->
+@if (dxfObjects().length > 0) {
+  <ngts-center>
+    @for (obj of dxfObjects(); track obj.uuid) {
+      <!-- <ngt-primitive [object]="obj" /> -->
+      <ngt-primitive *args="[obj]" [parameters]="{ scale: 0.15 }"/>
+    }
+  </ngts-center>
+} 
+
+<!-- GLB -->
 @if (glbUrl()) {
   @let gltfData = gltf;
 
@@ -38,21 +48,25 @@
         disableY: false,
         disableZ: false
       }">
-      <ngt-primitive *args="[gltf.scene()]"  [parameters]="{ scale: 0.15 }" />
+      <ngt-primitive *args="[gltf.scene()]" [parameters]="{ scale: 0.15 }" />
     </ngts-center>
   }
 }
 
-@if (showStl) {
-  <ngts-center 
-    [options]="{
-      disableX: false,
-      disableY: false,
-      disableZ: false
-    }">
+<!-- STL -->
+@if (stlUrl.value(); as geometry) {
+  <ngts-center>
+    <ngt-mesh [geometry]="geometry">
+      <ngt-mesh-standard-material color="#4f46e5" />
+    </ngt-mesh>
+  </ngts-center>
+}
+
+<!-- OBJ -->
+@if (objUrl.value(); as object) {
+  <ngts-center>
     <!-- <ngt-primitive [object]="object" /> -->
-     <ngt-primitive *args="[gltf2.scene()]"  [parameters]="{ scale: 0.15 }" />
-     
+    <ngt-primitive *args="[object]" [parameters]="{ scale: 0.15 }" />
   </ngts-center>
 }
 
