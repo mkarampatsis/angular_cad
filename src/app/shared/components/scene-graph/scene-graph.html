@@ -28,14 +28,11 @@
 </ngts-center> -->
 
 <!-- DXF -->
-@if (dxfObjects().length > 0) {
+@if (dxfGroup(); as group) {
   <ngts-center>
-    @for (obj of dxfObjects(); track obj.uuid) {
-      <!-- <ngt-primitive [object]="obj" /> -->
-      <ngt-primitive *args="[obj]" [parameters]="{ scale: 0.15 }"/>
-    }
+    <ngt-primitive *args="[group]" />
   </ngts-center>
-} 
+}
 
 <!-- GLB -->
 @if (glbUrl()) {

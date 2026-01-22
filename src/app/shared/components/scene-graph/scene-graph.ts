@@ -7,6 +7,7 @@ import { STLLoader, OBJLoader } from 'three-stdlib';
 import { loaderResource } from "angular-three";
 
 import DxfParser from 'dxf-parser';
+import type { ILineEntity, ILwpolylineEntity  } from 'dxf-parser';
 
 // import { Cube } from "../cube/cube";
 import { NgtsCameraControls } from "angular-three-soba/controls";
@@ -28,7 +29,7 @@ export class SceneGraph {
   
   importFileService = inject(ImportFileService);
 
-  dxfObjects = signal<THREE.Object3D[]>([]);
+  dxfGroup = signal<THREE.Group | null>(null);
 
   // GLB URL signal
   glbUrl = computed(() => {
@@ -83,34 +84,76 @@ export class SceneGraph {
     const parser = new DxfParser();
     const dxf = parser.parseSync(text);
 
-    if (!dxf || !dxf.entities) {
-      console.warn('Invalid or empty DXF file');
-      this.dxfObjects.set([]);
+    if (!dxf?.entities?.length) {
+      console.warn('Invalid or empty DXF');
+      this.dxfGroup.set(null);
       return;
     }
 
-    const objects: THREE.Object3D[] = [];
-    console.log(dxf)
+    const group = new THREE.Group();
+    console.log("DXF>>",dxf)
     for (const entity of dxf.entities) {
-      if (entity.type === 'LINE') {
-        objects.push(this.createLine(entity));
+      switch (entity.type) {
+        case 'LINE': {
+          const line = entity as ILineEntity;
+          if (line.vertices.length >= 2) {
+            group.add(this.createLine(line));
+          }
+          break;
+        }
+
+        case 'LWPOLYLINE': {
+          const poly = entity as ILwpolylineEntity;
+          group.add(this.createPolyline(poly));
+          break;
+        }
       }
     }
-    
-    this.dxfObjects.set(objects);
-    console.log(this.dxfObjects().length);
-    console.log(this.dxfObjects());
+
+    // 🔑 center + scale
+    const box = new THREE.Box3().setFromObject(group);
+    const size = new THREE.Vector3();
+    box.getSize(size);
+
+    const maxDim = Math.max(size.x, size.y, size.z);
+    const scale = 10 / maxDim; // normalize size
+
+    group.scale.setScalar(scale);
+    box.getCenter(group.position).multiplyScalar(-1);
+
+    this.dxfGroup.set(group);
   }
 
-  private createLine(entity: any): THREE.Line {
-    const geometry = new THREE.BufferGeometry().setFromPoints([
-      new THREE.Vector3(entity.start.x, entity.start.y, 0),
-      new THREE.Vector3(entity.end.x, entity.end.y, 0),
-    ]);
+  private createLine(entity: ILineEntity): THREE.Line {
+    const points = entity.vertices.map((v: any) =>
+      new THREE.Vector3(v.x, v.y, v.z ?? 0)
+    );
 
-    const material = new THREE.LineBasicMaterial({ color: 0x000000 });
+    const geometry = new THREE.BufferGeometry().setFromPoints(points);
 
-    return new THREE.Line(geometry, material);
+    return new THREE.Line(
+      geometry,
+      new THREE.LineBasicMaterial({ color: 0x111111 })
+    );
   }
-  
+
+  private createPolyline(entity: ILwpolylineEntity): THREE.Line {
+    const points = entity.vertices.map(v =>
+      new THREE.Vector3(v.x, v.y, v.z ?? 0)
+    );
+
+    // Check if polyline is closed
+    const isClosed = !!entity.shape; // <-- important fix
+    if (isClosed && points.length > 2) {
+      points.push(points[0].clone());
+    }
+
+    const geometry = new THREE.BufferGeometry().setFromPoints(points);
+
+    return new THREE.Line(
+      geometry,
+      new THREE.LineBasicMaterial({ color: 0x2563eb })
+    );
+  }
+
 }
