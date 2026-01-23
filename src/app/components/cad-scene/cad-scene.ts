@@ -15,7 +15,7 @@ export class CadScene {
   camera = new THREE.PerspectiveCamera(60, 1, 0.1, 10000);
   controls!: OrbitControls;
 
-   onCreated({ camera, gl }: { camera: THREE.Camera; gl: THREE.WebGLRenderer }) {
+  onCreated({ camera, gl }: { camera: THREE.Camera; gl: THREE.WebGLRenderer }) {
     this.controls = new OrbitControls(camera, gl.domElement);
 
     this.controls.enableRotate = true;
