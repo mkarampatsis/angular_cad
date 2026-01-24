@@ -27,7 +27,6 @@ activeOffcanvas = inject(NgbActiveOffcanvas);
     this.fileInput.nativeElement.click();
   }
   importDXF() { 
-    console.log('Import DXF'); 
     this.fileInputDXF.nativeElement.click();
   }
   exportScene() { console.log('Export Scene'); }
@@ -80,8 +79,8 @@ activeOffcanvas = inject(NgbActiveOffcanvas);
     reader.onload = () => { 
       const dxfText = reader.result as string; 
       const { nodes, elements } = this.dxfLoaderService.dxfImport(dxfText); 
-      console.log("Node>>",nodes);
-      console.log("Elements>>",elements);
+      // console.log("Node>>",nodes);
+      // console.log("Elements>>",elements);
       // SEND TO ThreeCad 
       this.dxfLoaderService.send(nodes, elements);
     }; 

@@ -4,7 +4,6 @@ import { INode, IElement, IDxfLineEntity } from '../components/interfaces/dxf-lo
 
 import * as THREE from 'three';
 import { Subject } from 'rxjs';
-// import { AddObjectCommand } from 'three/examples/jsm/commands/AddObjectCommand.js';
 
 @Injectable({
   providedIn: 'root'
@@ -37,16 +36,13 @@ export class DxfLoaderService {
       Number((pt.z ?? 0).toFixed(prcs))
     ];
 
-    console.log(">>>", allLines);
     // Initialize with first line
     if (allLines.length > 0) {
-      console.log("alllines>>", allLines)
       NODES.push(roundNode(allLines[0].vertices[0]));
       NODES.push(roundNode(allLines[0].vertices[0]));
     }
 
     for (const line of allLines) {
-      console.log("line>>", line)
       const nodei = roundNode(line.vertices[0]);
       const nodej = roundNode(line.vertices[1]);
 
@@ -145,8 +141,6 @@ export class DxfLoaderService {
           dof_ry: 1,
           dof_rz: 1,
         };
-
-        console.log('IF Node >>', node.nn, node.coord_x, node.coord_y, node.coord_z);
       } else {
         // SUPPORTED NODE → Box
         const geometry = new THREE.BoxGeometry(0.15, 0.15, 0.15);
@@ -169,7 +163,6 @@ export class DxfLoaderService {
           dof_rz: node.dof_rz,
         };
 
-        console.log('Else Node >>', node.nn, node.coord_x, node.coord_y, node.coord_z);
       }
 
       mesh.name = `Node ${node.nn}`;
