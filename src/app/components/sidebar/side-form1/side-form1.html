@@ -13,6 +13,7 @@
     <!-- <li class="list-group-item" (click)="loadFile()"><i class="bi bi-folder2-open me-2"></i>Load</li> -->
     <li class="list-group-item" (click)="saveFile()"><i class="bi bi-save me-2"></i>Save</li>
     <li class="list-group-item pointer-cursor" (click)="importFile()" role="button"><i class="bi bi-upload me-2"></i>Import File</li>
+    <li class="list-group-item pointer-cursor" (click)="importDXF()" role="button"><i class="bi bi-upload me-2"></i>Import DXF</li>
     <li class="list-group-item" (click)="exportScene()"><i class="bi bi-download me-2"></i>Export Scene</li>
     <li class="list-group-item" (click)="publish()"><i class="bi bi-cloud-upload me-2"></i>Publish</li>
   </ul>
@@ -37,6 +38,9 @@
   </button>
 
   <!-- Hidden file input --> 
-   <input #fileInput type="file" accept=".dxf,.glb,.gltf,.obj,.stl" (change)="loadFile($event)" style="display: none" />
+  <input #fileInput type="file" accept=".dxf,.glb,.gltf,.obj,.stl" (change)="loadFile($event)" style="display: none" />
+
+  <!-- Hidden file input --> 
+  <input #fileInputDXF type="file" accept=".dxf" (change)="loadDXF($event)" style="display: none" />
 </div>
 

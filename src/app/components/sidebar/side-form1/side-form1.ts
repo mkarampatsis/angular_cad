@@ -12,9 +12,10 @@ import { ImportFileService } from '../../../shared/services/import-file.service'
 export class SideForm1 {
 activeOffcanvas = inject(NgbActiveOffcanvas);
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
+  @ViewChild('fileInputDXF') fileInputDXF!: ElementRef<HTMLInputElement>;
 
   importFileService = inject(ImportFileService);
-  // dxfLoaderService = inject(DxfLoaderService);
+  dxfLoaderService = inject(DxfLoaderService);
 	// @Input() name: string | undefined;
 
   // File actions
@@ -24,6 +25,10 @@ activeOffcanvas = inject(NgbActiveOffcanvas);
   importFile() { 
     console.log('Import File'); 
     this.fileInput.nativeElement.click();
+  }
+  importDXF() { 
+    console.log('Import DXF'); 
+    this.fileInputDXF.nativeElement.click();
   }
   exportScene() { console.log('Export Scene'); }
   publish() { console.log('Publish'); }
@@ -65,4 +70,23 @@ activeOffcanvas = inject(NgbActiveOffcanvas);
 
     input.value = '';
   }
+
+  loadDXF(event: Event){
+    const input = event.target as HTMLInputElement; 
+    const file = input.files?.[0]; 
+    if (!file) return; 
+
+    const reader = new FileReader(); 
+    reader.onload = () => { 
+      const dxfText = reader.result as string; 
+      const { nodes, elements } = this.dxfLoaderService.dxfImport(dxfText); 
+      console.log("Node>>",nodes);
+      console.log("Elements>>",elements);
+      // drawNodes(this.editor, nodes); 
+      // drawElements(this.editor, elements); 
+    }; 
+    
+    reader.readAsText(file); 
+  }
 }
+
