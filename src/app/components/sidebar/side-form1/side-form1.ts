@@ -82,8 +82,8 @@ activeOffcanvas = inject(NgbActiveOffcanvas);
       const { nodes, elements } = this.dxfLoaderService.dxfImport(dxfText); 
       console.log("Node>>",nodes);
       console.log("Elements>>",elements);
-      // drawNodes(this.editor, nodes); 
-      // drawElements(this.editor, elements); 
+      // SEND TO ThreeCad 
+      this.dxfLoaderService.send(nodes, elements);
     }; 
     
     reader.readAsText(file); 

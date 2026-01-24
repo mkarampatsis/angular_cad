@@ -3,12 +3,15 @@ import {
   ElementRef, 
   ViewChild, 
   AfterViewInit, 
-  OnDestroy 
+  OnDestroy, 
+  inject
 } from '@angular/core';
 import { Sidebar } from '../sidebar/sidebar';
 
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { DxfLoaderService } from '../../shared/services/dxf-loader.service';
+import { IElement, INode } from '../../shared/components/interfaces/dxf-loader.interface';
 
 @Component({
   selector: 'app-three-cad',
@@ -20,6 +23,8 @@ export class ThreeCad {
    @ViewChild('canvas', { static: true }) 
    canvasRef!: ElementRef<HTMLCanvasElement>; 
 
+   dxfLoaderService = inject(DxfLoaderService);
+
    private controls!: OrbitControls;
    
    private renderer!: THREE.WebGLRenderer; 
@@ -30,6 +35,13 @@ export class ThreeCad {
    ngAfterViewInit() { 
     this.initScene(); 
     this.startRenderingLoop(); 
+
+    // Listen for DXF data 
+    this.dxfLoaderService.dxfData$
+      .subscribe(({ nodes, elements }) => { 
+        this.loadModel(nodes, elements); 
+      });
+
     window.addEventListener('resize', this.onResize); 
   } 
   ngOnDestroy() { 
@@ -87,4 +99,28 @@ export class ThreeCad {
     this.camera.updateProjectionMatrix(); 
     this.renderer.setSize(width, height); 
   };
+
+  private loadModel(nodes: INode[], elements: IElement[]) { 
+    // 1. Create node meshes 
+    const nodeMeshes = this.dxfLoaderService.drawNodes(nodes); 
+    nodeMeshes.forEach(mesh => this.scene.add(mesh)); 
+    // 2. Create element meshes 
+    const elementMeshes = this.dxfLoaderService.drawElements(this.scene, elements); 
+    elementMeshes.forEach(mesh => this.scene.add(mesh)); 
+    // 3. Optional: auto-fit camera 
+    this.fitCameraToScene(); 
+  }
+
+  private fitCameraToScene() {
+    const box = new THREE.Box3().setFromObject(this.scene);
+    const size = box.getSize(new THREE.Vector3()).length();
+    const center = box.getCenter(new THREE.Vector3());
+
+    this.controls.target.copy(center);
+    this.camera.position.copy(center);
+    this.camera.position.x += size / 2;
+    this.camera.position.y += size / 2;
+    this.camera.position.z += size / 2;
+    this.camera.updateProjectionMatrix();
+  }
 }
